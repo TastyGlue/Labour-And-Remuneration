@@ -1,11 +1,11 @@
 ﻿namespace TRZ_Console
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            Console.OutputEncoding = System.Text.Encoding.Unicode;
-            Console.InputEncoding = System.Text.Encoding.Unicode;
+            Console.OutputEncoding = Encoding.Unicode;
+            Console.InputEncoding = Encoding.Unicode;
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
             while (true)
@@ -13,6 +13,7 @@
                 try
                 {
                     // Read Sheet1
+                    ReadService.GetSheet1();
                     // Write data to other sheets
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Вашият обработен екселски файл е готов.");

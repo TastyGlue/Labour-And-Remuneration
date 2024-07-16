@@ -2,10 +2,10 @@
 {
     public class Record
     {
-        public string Name = string.Empty;
-        public List<string> Workdays = [];
+        public string Name { get; set; } = string.Empty;
+        public List<string?> Workdays { get; set; } = [];
 
-        public Record(string name, List<string> workdays)
+        public Record(string name, List<string?> workdays)
         {
             Name = name;
             Workdays = workdays;
