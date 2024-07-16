@@ -2,7 +2,7 @@
 {
     public static class ReadService
     {
-        public static string GetInputFileName()
+        static string GetInputFileName()
         {
             while (true)
             {
@@ -44,7 +44,7 @@
             }
         }
 
-        public static void ReadSheet1(ExcelWorksheet worksheet)
+        static void ReadSheet1(ExcelWorksheet worksheet)
         {
             for (int row = 1; row <= worksheet.Dimension.End.Row; row++)
             {
@@ -55,19 +55,37 @@
             ;
         }
 
-        public static void ReadSheet1Row(ExcelWorksheet worksheet, int row)
+        static void ReadSheet1Row(ExcelWorksheet worksheet, int row)
         {
             string name = worksheet.Cells[row, 1].Value.ToString()!;
             List<string?> workdays = [];
 
-            for (int col = 2; col <= worksheet.Dimension.End.Column; col++)
+            int startColIndex = IsEmployeeFromOtherStore(worksheet, row) ? 3 : 2;
+
+            for (int col = startColIndex; col <= worksheet.Dimension.End.Column; col++)
             {
                 workdays.Add(worksheet.Cells[row, col].Value?.ToString());
             }
 
             name = NameService.CleanName(name);
             Record record = new(name, workdays);
-            DataSets.Records.Add(record);
+
+            if (IsEmployeeValid(workdays))
+                DataSets.Records.Add(record);
+        }
+
+        static bool IsEmployeeValid(List<string?> workdays)
+        {
+            return workdays.FirstOrDefault(x => x != null && !x.Equals("и", StringComparison.OrdinalIgnoreCase)) != null;
+        }
+
+        static bool IsEmployeeFromOtherStore(ExcelWorksheet worksheet, int row)
+        {
+            string? value = worksheet.Cells[row, 2].Value?.ToString();
+            if (value != null && value.StartsWith("ФМ"))
+                return true;
+            else
+                return false;
         }
     }
 }

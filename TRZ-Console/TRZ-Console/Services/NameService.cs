@@ -2,35 +2,44 @@
 {
     public static class NameService
     {
-        public static readonly string[] Separators = { "-от", "- от", " - от", " -от", " от ", "-тел:", " -тел:", " - тел:", "- тел:", " - ", " -", "- ", ",", ":", "/", ".-" };
-
         public static string CleanName(string name)
         {
-            List<int> indexes = [];
-            foreach(var separator in Separators)
+            string[] words = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            List<string> names = [];
+
+            for (int i = 0; i < words.Length; i++)
             {
-                int index = name.IndexOf(separator, StringComparison.OrdinalIgnoreCase);
-                if (index != -1)
-                {
-                    indexes.Add(index);
-                }
+                if (i == 3)
+                    break;
+
+                names.Add(words[i]);
             }
 
-            string pattern = @"-\d";
-            Match match = Regex.Match(name, pattern);
-            if (match.Success)
-                indexes.Add(match.Index);
+            string lastName = names[^1];
+            int symbolIndex = FindFirstNonAlphabeticalSymbol(lastName);
 
-            name = name.TrimEnd();
-
-            if (indexes.Count == 0)
+            if (symbolIndex != -1)
             {
-                return name;
+                lastName = lastName.Substring(0, symbolIndex);
+                names[^1] = lastName;
+            }
+
+            return string.Join(' ', names);
+        }
+
+        static int FindFirstNonAlphabeticalSymbol(string word)
+        {
+            // Define a regular expression pattern to match any non-alphabetical symbol
+            string pattern = @"[^a-zA-Zа-яА-Я]";
+            Match match = Regex.Match(word, pattern);
+
+            if (match.Success)
+            {
+                return match.Index;
             }
             else
             {
-                int firstIndex = indexes.Min();
-                return name.Substring(0, firstIndex);
+                return -1; // Return -1 if no non-alphabetical symbol is found
             }
         }
     }
