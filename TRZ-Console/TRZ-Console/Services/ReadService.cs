@@ -68,7 +68,7 @@
             }
 
             name = NameService.CleanName(name);
-            Record record = new(name, workdays);
+            Record record = new(row, name, workdays);
 
             if (IsEmployeeValid(workdays))
                 DataSets.Records.Add(record);
