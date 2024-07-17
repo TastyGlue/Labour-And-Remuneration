@@ -42,6 +42,8 @@
 
                 ReadSheet1(worksheet);
             }
+
+            EmployeeService.GetEmployees();
         }
 
         static void ReadSheet1(ExcelWorksheet worksheet)
@@ -52,7 +54,6 @@
                     break;
                 ReadSheet1Row(worksheet, row);
             }
-            ;
         }
 
         static void ReadSheet1Row(ExcelWorksheet worksheet, int row)

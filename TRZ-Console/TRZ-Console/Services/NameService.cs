@@ -6,36 +6,6 @@
         public static string CleanName(string name)
         {
             List<string> words = name.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
-            /*List<string> wordsList = [];
-
-            for (int i = 0; i < words.Length; i++)
-            {
-                if (i == 3)
-                    break;
-
-                wordsList.Add(words[i]);
-            }
-
-            string lastName = wordsList[^1];
-            int symbolIndex = FindFirstNonAlphabeticalSymbol(lastName);
-
-            if (symbolIndex != -1)
-            {
-                lastName = lastName.Substring(0, symbolIndex);
-                wordsList[^1] = lastName;
-            }
-
-            name = string.Join(' ', wordsList).TrimEnd();
-            List<string> names = name.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
-            if (names.Count == 3)
-            {
-                int secondNameSymbolIndex = FindFirstNonAlphabeticalSymbol(names[1]);
-
-                if (secondNameSymbolIndex != -1)
-                {
-                    name = names[0] + " " + names[2];
-                }
-            }*/
 
             ThreeWordFilter(words);
             LastWordFilter(words);
