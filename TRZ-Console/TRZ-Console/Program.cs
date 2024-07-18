@@ -33,8 +33,11 @@
                     Console.WriteLine($"Грешка: '{ex.Message}'");
                 }
 
-                // Read user input
-                //Clear data sets
+                bool isEnd = ReadService.UserInputMainLoop();
+                if (isEnd)
+                    break;
+                else
+                    DataSets.ClearData();
             }
         }
     }

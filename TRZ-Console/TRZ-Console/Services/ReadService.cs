@@ -73,5 +73,29 @@
             else
                 return false;
         }
+
+        public static bool UserInputMainLoop()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Искате ли да продъжлите програмата?");
+
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("(0 + ENTER) за НЕ | (1 + ENTER) за ДА");
+                Console.ResetColor();
+
+                string? userInput = Console.ReadLine();
+                if (userInput == "1")
+                    return false;
+                else if (userInput != "0" || userInput == null)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Невалиден отоговор.");
+                }
+                else
+                    return true;
+            }
+        }
     }
 }
