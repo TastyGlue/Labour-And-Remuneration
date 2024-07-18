@@ -7,6 +7,7 @@
         public List<string?> Workdays { get; set; } = [];
         public List<int> Rows { get; set; } = [];
         public string? Store { get; set; }
+        public int? StoreRow { get; set; }
 
         public Employee(string name, bool isTwoNames, List<string?> workdays, List<int> rows)
         {
@@ -14,6 +15,11 @@
             IsTwoNames = isTwoNames;
             Workdays = workdays;
             Rows = rows;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} - Rows: {string.Join(" ", Rows)}";
         }
     }
 }

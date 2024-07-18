@@ -2,7 +2,7 @@
 {
     public static class ReadService
     {
-        static string GetInputFileName()
+        public static string GetInputFileName()
         {
             while (true)
             {
@@ -31,22 +31,7 @@
             }
         }
 
-        public static void GetSheet1()
-        {
-            var filePath = GetInputFileName();
-            FileInfo file = new FileInfo(filePath);
-            using (ExcelPackage package = new ExcelPackage(file))
-            {
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault(x => x.Name.ToLower() == "sheet1")
-                    ?? throw new Exception("Липсва worksheet с име \"Sheet1\"");
-
-                ReadSheet1(worksheet);
-            }
-
-            EmployeeService.GetEmployees();
-        }
-
-        static void ReadSheet1(ExcelWorksheet worksheet)
+        public static void ReadSheet1(ExcelWorksheet worksheet)
         {
             for (int row = 1; row <= worksheet.Dimension.End.Row; row++)
             {
@@ -71,11 +56,11 @@
             name = NameService.CleanName(name);
             Record record = new(row, name, workdays);
 
-            if (IsEmployeeValid(workdays))
+            if (IsRelevant(workdays))
                 DataSets.Records.Add(record);
         }
 
-        static bool IsEmployeeValid(List<string?> workdays)
+        static bool IsRelevant(List<string?> workdays)
         {
             return workdays.FirstOrDefault(x => x != null && !x.Equals("и", StringComparison.OrdinalIgnoreCase)) != null;
         }

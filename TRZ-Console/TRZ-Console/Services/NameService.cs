@@ -3,6 +3,29 @@
     public static class NameService
     {
         static readonly string[] Keywords = ["във", "в", "от", "на", "дата", "магазин"];
+
+        public static bool IsNamesMatching(string? storeName, Employee employee)
+        {
+            if (storeName == null)
+                return false;
+
+            if (!employee.IsTwoNames)
+                return storeName.Contains(employee.Name, StringComparison.OrdinalIgnoreCase);
+            else
+            {
+                string[] storeNames = storeName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                string[] employeeNames = employee.Name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                if (storeNames.Length == 2)
+                    return storeName.Equals(employee.Name, StringComparison.OrdinalIgnoreCase);
+                else
+                {
+                    return storeNames[0].Equals(employeeNames[0], StringComparison.OrdinalIgnoreCase)
+                        && storeNames[2].Equals(employeeNames[1], StringComparison.OrdinalIgnoreCase);
+                }
+            }
+        }
+
         public static string CleanName(string name)
         {
             List<string> words = name.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();

@@ -4,5 +4,6 @@
     {
         public static List<Record> Records { get; set; } = [];
         public static List<Employee> Employees { get; set; } = [];
+        public static List<Error> Errors { get; set; } = [];
     }
 }

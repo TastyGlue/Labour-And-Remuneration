@@ -12,9 +12,17 @@
             {
                 try
                 {
-                    // Read Sheet1
-                    ReadService.GetSheet1();
-                    // Write data to other sheets
+                    var filePath = ReadService.GetInputFileName();
+                    FileInfo file = new FileInfo(filePath);
+                    using (ExcelPackage package = new ExcelPackage(file))
+                    {
+                        ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault(x => x.Name.ToLower() == "sheet1")
+                            ?? throw new Exception("Липсва worksheet с име \"Sheet1\"");
+
+                        ReadService.ReadSheet1(worksheet);
+                        EmployeeService.SearchStores(package.Workbook);
+                    }
+
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Вашият обработен екселски файл е готов.");
                 }
