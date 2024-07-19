@@ -32,7 +32,7 @@
                     employee.Store = foundIn.First().Key;
                     employee.StoreRow = foundIn.First().Value;
                     WriteService.WriteEmployeeWorkdays(
-                        workbook.Worksheets.First(x => x.Name == employee.Store), 
+                        package.Workbook.Worksheets.First(x => x.Name == employee.Store), 
                         (int)employee.StoreRow, 
                         employee.Workdays);
                 }
