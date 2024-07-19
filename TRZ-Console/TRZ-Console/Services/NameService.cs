@@ -4,24 +4,24 @@
     {
         static readonly string[] Keywords = ["във", "в", "от", "на", "дата", "магазин"];
 
-        public static bool IsNamesMatching(string? storeName, Employee employee)
+        public static bool IsNamesMatching(string? nameInStore, Employee employee)
         {
-            if (storeName == null)
+            if (nameInStore == null)
                 return false;
 
             if (!employee.IsTwoNames)
-                return storeName.Contains(employee.Name, StringComparison.OrdinalIgnoreCase);
+                return nameInStore.Contains(employee.Name, StringComparison.OrdinalIgnoreCase);
             else
             {
-                string[] storeNames = storeName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                string[] namesInStore = nameInStore.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 string[] employeeNames = employee.Name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-                if (storeNames.Length == 2)
-                    return storeName.Equals(employee.Name, StringComparison.OrdinalIgnoreCase);
+                if (namesInStore.Length == 2)
+                    return nameInStore.Equals(employee.Name, StringComparison.OrdinalIgnoreCase);
                 else
                 {
-                    return storeNames[0].Equals(employeeNames[0], StringComparison.OrdinalIgnoreCase)
-                        && storeNames[2].Equals(employeeNames[1], StringComparison.OrdinalIgnoreCase);
+                    return namesInStore[0].Equals(employeeNames[0], StringComparison.OrdinalIgnoreCase)
+                        && namesInStore[2].Equals(employeeNames[1], StringComparison.OrdinalIgnoreCase);
                 }
             }
         }
@@ -44,9 +44,7 @@
             if (words.Count > 4)
             {
                 words.RemoveRange(4, words.Count - 4);
-                int symbolIndex = FindFirstNonAlphabeticalSymbol(words[3]);
-                if (symbolIndex != -1 
-                    || Keywords.Any(x => x.Equals(words[3], StringComparison.OrdinalIgnoreCase))
+                if (Keywords.Any(x => x.Equals(words[3], StringComparison.OrdinalIgnoreCase))
                     || words[3].Length < 3)
                     words.RemoveAt(3);
             }
