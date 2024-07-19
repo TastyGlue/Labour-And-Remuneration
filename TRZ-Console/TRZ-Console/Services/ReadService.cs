@@ -47,8 +47,9 @@
             List<string?> workdays = [];
 
             int startColIndex = IsEmployeeFromOtherStore(worksheet, row) ? 3 : 2;
+            int endColIndex = startColIndex + 30;
 
-            for (int col = startColIndex; col <= worksheet.Dimension.End.Column; col++)
+            for (int col = startColIndex; col <= endColIndex; col++)
             {
                 workdays.Add(worksheet.Cells[row, col].Value?.ToString());
             }

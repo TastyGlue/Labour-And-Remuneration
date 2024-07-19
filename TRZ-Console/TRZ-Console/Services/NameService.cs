@@ -30,18 +30,26 @@
         {
             List<string> words = name.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            ThreeWordFilter(words);
+            FourWordFilter(words);
             LastWordFilter(words);
             SecondWordFilter(words);
             KeyWordFilter(words);
+            DashFilter(words);
 
             return string.Join(' ', words);
         }
 
-        static void ThreeWordFilter(List<string> words)
+        static void FourWordFilter(List<string> words)
         {
-            if (words.Count > 3)
-                words.RemoveRange(3, words.Count - 3);
+            if (words.Count > 4)
+            {
+                words.RemoveRange(4, words.Count - 4);
+                int symbolIndex = FindFirstNonAlphabeticalSymbol(words[3]);
+                if (symbolIndex != -1 
+                    || Keywords.Any(x => x.Equals(words[3], StringComparison.OrdinalIgnoreCase))
+                    || words[3].Length < 3)
+                    words.RemoveAt(3);
+            }
         }
 
         static void LastWordFilter(List<string> words)
@@ -78,6 +86,20 @@
         static void KeyWordFilter(List<string> words)
         {
             words.RemoveAll(x => Keywords.Any(y => string.Equals(x, y, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        static void DashFilter(List<string> words)
+        {
+            for (int i = 0; i < words.Count - 1; i++)
+            {
+                int dashIndex = words[i].IndexOf('-');
+                if (dashIndex != -1)
+                {
+                    words[i] = words[i].Substring(0, dashIndex);
+                    for (int j = i + 1; j < words.Count; j++)
+                        words.RemoveAt(j);
+                }
+            }
         }
 
         static int FindFirstNonAlphabeticalSymbol(string word)
