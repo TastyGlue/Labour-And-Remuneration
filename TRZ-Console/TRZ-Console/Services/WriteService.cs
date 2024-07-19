@@ -4,9 +4,15 @@
     {
         public static void WriteErrorSheet(ExcelPackage package)
         {
-            ExcelWorksheet errorWorksheet = package.Workbook.Worksheets.Add("ГРЕШКИ");
+            var errorWorksheet = package.Workbook.Worksheets.FirstOrDefault(x => x.Name == "ГРЕШКИ");
+            if (errorWorksheet == null)
+                errorWorksheet = package.Workbook.Worksheets.Add("ГРЕШКИ");
+            else
+                errorWorksheet.Cells.Clear();
+
             WriteErrorHeader(errorWorksheet);
             WriteErrors(errorWorksheet);
+            errorWorksheet.Cells[errorWorksheet.Dimension.Address].AutoFitColumns();
         }
 
         static void WriteErrors(ExcelWorksheet worksheet)
@@ -59,9 +65,9 @@
             worksheet.Cells["A2:D2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
 
             worksheet.Cells["A2"].Value = "Тип";
-            worksheet.Cells["A2"].Value = "Име на служител";
-            worksheet.Cells["A2"].Value = "Редове";
-            worksheet.Cells["A2"].Value = "Описание";
+            worksheet.Cells["B2"].Value = "Име на служител";
+            worksheet.Cells["C2"].Value = "Редове";
+            worksheet.Cells["D2"].Value = "Описание";
         }
 
         public static void WriteEmployeeWorkdays(ExcelWorksheet worksheet, int row, List<string?> workdays)
@@ -70,8 +76,9 @@
 
             foreach (var workday in workdays)
             {
-                if (worksheet.Cells[row, col++].Value == null)
-                    worksheet.Cells[row, col++].Value = workday;
+                if (worksheet.Cells[row, col].Value == null)
+                    worksheet.Cells[row, col].Value = workday;
+                col++;
             }
         }
     }
