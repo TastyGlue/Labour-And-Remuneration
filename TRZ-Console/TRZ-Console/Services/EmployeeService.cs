@@ -38,7 +38,7 @@
                 }
                 else
                 {
-                    Error error = new(foundIn.Count == 0 ? ErrorType.NotFound : ErrorType.Conflict,
+                    Error error = new(foundIn.Count == 0 ? ErrorType.NotFound : ErrorType.NameConflict,
                         employee,
                         foundIn);
                     DataSets.Errors.Add(error);
@@ -54,16 +54,23 @@
             {
                 string name = group.Key;
                 bool isTwoNames = name.Split(' ').Length == 2;
-                var workdays = GetWorkDays(group);
+                var workdays = GetWorkDays(group, out var workdaysError);
                 List<int> rows = group.Select(x => x.Row).ToList();
 
                 Employee employee = new(name, isTwoNames, workdays, rows);
-                DataSets.Employees.Add(employee);
+                if (workdaysError == null)
+                    DataSets.Employees.Add(employee);
+                else
+                {
+                    Error error = new(ErrorType.WorkdayConflict, employee, workdaysError);
+                    DataSets.Errors.Add(error);
+                }
             }
         }
 
-        static List<string?> GetWorkDays(IGrouping<string, Record> group)
+        static List<string?> GetWorkDays(IGrouping<string, Record> group, out Dictionary<string, int>? workdaysError)
         {
+            workdaysError = null;
             string?[] workdays = new string?[31];
             int index;
 
@@ -79,6 +86,16 @@
                     {
                         index++;
                         continue;
+                    }
+
+                    if (workdays[index] != null && workday != null && !workday.Equals(workdays[index], StringComparison.OrdinalIgnoreCase))
+                    {
+                        workdaysError = new Dictionary<string, int>
+                        {
+                            { workdays[index]!, index + 1 },
+                            { workday, index + 1 }
+                        };
+                        return [];
                     }
 
                     workdays[index] = workday;
