@@ -20,7 +20,10 @@
                             ?? throw new Exception("Липсва worksheet с име \"Sheet1\"");
 
                         ReadService.ReadSheet1(worksheet);
-                        EmployeeService.SearchStores(package.Workbook);
+                        EmployeeService.SearchStores(package);
+                        WriteService.WriteErrorSheet(package);
+
+                        File.WriteAllBytes(filePath, package.GetAsByteArray());
                     }
 
                     Console.ForegroundColor = ConsoleColor.Green;

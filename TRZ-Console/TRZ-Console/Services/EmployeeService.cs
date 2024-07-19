@@ -2,11 +2,11 @@
 {
     public static class EmployeeService
     {
-        public static void SearchStores(ExcelWorkbook workbook)
+        public static void SearchStores(ExcelPackage package)
         {
             GetEmployees();
 
-            List<ExcelWorksheet> worksheets = workbook.Worksheets.Where(x => x.Name.ToLower() != "sheet1").ToList();
+            List<ExcelWorksheet> worksheets = package.Workbook.Worksheets.Where(x => x.Name.ToLower() != "sheet1").ToList();
 
             foreach (Employee employee in DataSets.Employees)
             {
