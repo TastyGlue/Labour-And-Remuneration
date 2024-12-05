@@ -12,19 +12,28 @@
             {
                 Dictionary<string, int> foundIn = [];
 
-                foreach (ExcelWorksheet worksheet in worksheets)
+                try
                 {
-                    int startRow = 11;
-
-                    for (int row = startRow; row <= worksheet.Dimension.End.Row; row++)
+                    foreach (ExcelWorksheet worksheet in worksheets)
                     {
-                        if (!int.TryParse(worksheet.Cells[row, 1].Value?.ToString(), out int num))
-                            continue;
+                        int startRow = 11;
 
-                        string? nameInStore = worksheet.Cells[row, 2].Value?.ToString();
-                        if (NameService.IsNamesMatching(nameInStore, employee))
-                            foundIn.Add(worksheet.Name, row);
+                        for (int row = startRow; row <= worksheet.Dimension.End.Row; row++)
+                        {
+                            if (!int.TryParse(worksheet.Cells[row, 1].Value?.ToString(), out int num))
+                                continue;
+
+                            string? nameInStore = worksheet.Cells[row, 2].Value?.ToString();
+                            if (NameService.IsNamesMatching(nameInStore, employee))
+                                foundIn.Add(worksheet.Name, row);
+                        }
                     }
+                }
+                catch (ArgumentException)
+                {
+                    Error error = new(ErrorType.NameDuplication, employee, foundIn);
+                    DataSets.Errors.Add(error);
+                    break;
                 }
 
                 if (foundIn.Count == 1)

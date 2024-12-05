@@ -39,6 +39,13 @@
 
                 return description;
             }
+            else if (ErrorType == ErrorType.NameDuplication)
+            {
+                string description = "Служител с това име се среща два пъти в един магазин ";
+                description += $"[Магазин: {foundIn.Last().Key}]";
+
+                return description;
+            }
             else
                 return string.Empty;
         }
@@ -48,6 +55,7 @@
     {
         NotFound,
         NameConflict,
-        WorkdayConflict
+        WorkdayConflict,
+        NameDuplication
     }
 }
